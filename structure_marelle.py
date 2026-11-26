@@ -78,4 +78,7 @@ class Marelle:
                 blocked = False
         return blocked
 
+    def enregistrer(self):
+        
+
         
