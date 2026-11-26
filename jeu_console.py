@@ -1,3 +1,5 @@
+from structure_marelle import Marelle
+
 def afficher_plateau(self):
     p = [f"{self.plateau[i]}({i:02d})" if self.plateau[i] == '.' else f" {self.plateau[i]}  " for i in range(24)]
     print("\n" + "="*45)
@@ -16,10 +18,28 @@ def afficher_plateau(self):
     print(f"{p[6]} ---------- {p[5]} ---------- {p[4]}")
     print("="*45 + "\n")
 
-def jouer(self):
-    tour = 0
-    while not checkWin():
+def jouer_coup(joueur):
+    case = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
+    while not check_possible(case_depart,case_arrivee):
+        case = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
+    if(joueur == 1):
         
-        
+    return
 
-afficher_plateau(marelle)        
+def retirer_pion():
+    return
+
+def jouer():
+    tour = 0
+    while not check_win()[0]:
+        if(tour%2 == 0):
+            joueur = 1
+        else:
+            joueur = 2
+        jouer_coup(joueur)
+        if check_alligne(last_move):
+            retirer_pion(case)
+        tour += 1
+        
+marelle = Marelle()
+afficher_plateau(marelle)  
