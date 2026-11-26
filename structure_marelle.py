@@ -24,16 +24,38 @@ class Marelle:
         self.pions = [0]*24
 
     def check_possible(self, case_dep, case_arr):
-        return self.pions[case_arr] == 0 and case_arr
+        return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep]
 
-    def nombre_pions(self, joueur):
+    def nombre_liste_pions(self, joueur):
         assert(joueur in [1, 2], "Joueur doit etre soit 1 ou 2")
         n = 0
-        for i in self.pions:
-            if i == joueur
+        l = []
+        for i in range(len(self.pions)):
+            if self.pions[i] == joueur:
+                n += 1
+                l.append(i)
+        return n, l
 
     def check_win(self):
-        pass
+        win = False
+        winner = None
+        for joueur in [1, 2]:
+            if self.nombre_liste_pions(joueur)[0] == 2:
+                win = True
+                winner = joueur
+
+        if not win:
+            for joueur in [1, 2]:
+                blocked = True
+                for case_dep in self.nombre_liste_pions(joueur)[1]:
+                    for case_arr in self.adj[case_dep]:
+                        if self.pions[case_arr] == 0:
+                            blocked = False
+
+                if blocked:
+                    win 
+
+        return win, winner
 
     def check_alligne(self, last_move):
         for a, b, c in self.moulins:
