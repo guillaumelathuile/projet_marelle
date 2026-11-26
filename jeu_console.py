@@ -19,9 +19,12 @@ def afficher_plateau(self):
     print("="*45 + "\n")
 
 def jouer_coup(joueur):
-    case = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
-    while not check_possible(case_depart,case_arrivee):
-        case = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
+    case_depart = int(input("Quelle pion voulez-vous déplacer (0 à 23) : "))
+    while Marelle.is_blocked(case_depart):
+        case_depart = int(input("Pion bloqué, choisissez-en un autre(0 à 23) : "))
+    case_arrivee = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
+    while not Marelle.check_possible(case_depart,case_arrivee, joueur):
+        case = int(input("Déplacement impossible, choisissez une autre case (0 à 23) : "))
     if(joueur == 1):
         marelle.pions[case] = 1
     else:
@@ -30,19 +33,20 @@ def jouer_coup(joueur):
 
 def retirer_pion(adversaire):
     case = int(input("Quelle pion voulez-vous retirer à votre adversaire (0 à 23) : "))
-    if(marelle.pions[case] == adversaire):
-        marelle.pions[case] = 0
+    while not (marelle.pions[case] == adversaire):
+        case = int(input("Ce n'est pas un pion adversaire, choisissez-en un autre (0 à 23) : "))
+    marelle.pions[case] = 0
         
 
 def jouer():
     tour = 0
-    while not check_win()[0]:
+    while not Marelle.check_win()[0]:
         if(tour%2 == 0):
             joueur = 1
         else:
             joueur = 2
         case = jouer_coup(joueur)
-        if check_alligne(case):
+        if Marelle.check_alligne(case):
             if (joueur == 1):
                 retirer_pion(2)
             else:
