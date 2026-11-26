@@ -23,11 +23,23 @@ class Marelle:
 
         self.pions = [0]*24
 
-    def check_possible(self, joueur, case):
-        pass
+    def check_possible(self, case_dep, case_arr):
+        return self.pions[case_arr] == 0 and case_arr
+
+    def nombre_pions(self, joueur):
+        assert(joueur in [1, 2], "Joueur doit etre soit 1 ou 2")
+        n = 0
+        for i in self.pions:
+            if i == joueur
 
     def check_win(self):
         pass
 
+    def check_alligne(self, last_move):
+        for a, b, c in self.moulins:
+            if last_move in [a, b, c]:
+                if self.pions[a] == self.pions[b] == self.pions[c] and self.pions[a] != 0:
+                    return True, self.pions[a]
+        return False, None
 
         
