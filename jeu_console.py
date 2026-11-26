@@ -23,11 +23,16 @@ def jouer_coup(joueur):
     while not check_possible(case_depart,case_arrivee):
         case = int(input("Dans quelle case voulez-vous jouer (0 à 23) : "))
     if(joueur == 1):
-        
-    return
+        marelle.pions[case] = 1
+    else:
+        marelle.pions[case] = 2
+    return case
 
-def retirer_pion():
-    return
+def retirer_pion(adversaire):
+    case = int(input("Quelle pion voulez-vous retirer à votre adversaire (0 à 23) : "))
+    if(marelle.pions[case] == adversaire):
+        marelle.pions[case] = 0
+        
 
 def jouer():
     tour = 0
@@ -36,9 +41,12 @@ def jouer():
             joueur = 1
         else:
             joueur = 2
-        jouer_coup(joueur)
-        if check_alligne(last_move):
-            retirer_pion(case)
+        case = jouer_coup(joueur)
+        if check_alligne(case):
+            if (joueur == 1):
+                retirer_pion(2)
+            else:
+                retirer_pion(1)
         tour += 1
         
 marelle = Marelle()
