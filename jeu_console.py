@@ -1,6 +1,6 @@
 from structure_marelle import Marelle
 
-def afficher_plateau(self):
+def afficher_plateau():
     p = [f"{self.plateau[i]}({i:02d})" if self.plateau[i] == '.' else f" {self.plateau[i]}  " for i in range(24)]
     print("\n" + "="*45)
     print(f"{p[0]} ---------- {p[1]} ---------- {p[2]}")
