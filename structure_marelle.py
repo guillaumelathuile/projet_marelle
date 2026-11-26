@@ -23,8 +23,8 @@ class Marelle:
 
         self.pions = [0]*24
 
-    def check_possible(self, case_dep, case_arr):
-        return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep]
+    def check_possible(self, case_dep, case_arr, joueur):
+        return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep] if self.nombre_liste_pions(joueur)[0] > 3 else True
 
     def nombre_liste_pions(self, joueur):
         assert(joueur in [1, 2], "Joueur doit etre soit 1 ou 2")
@@ -49,14 +49,15 @@ class Marelle:
             for joueur in [1, 2]:
                 blocked = True
                 n, l_cases = self.nombre_liste_pions(joueur)
-                for case_dep in l_cases:
-                    for case_arr in self.adj[case_dep]:
-                        if self.pions[case_arr] == 0:
-                            blocked = False
+                if n > 3 :
+                    for case_dep in l_cases:
+                        for case_arr in self.adj[case_dep]:
+                            if self.pions[case_arr] == 0:
+                                blocked = False
 
-                if blocked:
-                    win = True
-                    winner = other_player[joueur]
+                    if blocked:
+                        win = True
+                        winner = other_player[joueur]
 
         return win, winner
 
