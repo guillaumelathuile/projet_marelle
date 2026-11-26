@@ -21,15 +21,14 @@ def afficher_plateau(marelle):
 
 def init_game():
     afficher_plateau(marelle)  
-    tour = 0
-    while not tour == 18:
-        if tour%2 == 0:
+    while not marelle.tour == 18:
+        if marelle.tour%2 == 0:
             joueur = 1
         else:
             joueur = 2
         placer_pion(joueur)
         afficher_plateau(marelle)
-        tour += 1
+        marelle.tour += 1
         
 def placer_pion(joueur):
     case = int(input("Ou voulez-vous placer votre pion (0 à 23) : "))
@@ -64,9 +63,9 @@ def retirer_pion(adversaire):
 
 def jouer():
     init_game()
-    tour = 0
+    marelle.tour = 0
     while not marelle.check_win(marelle)[0]:
-        if(tour%2 == 0):
+        if(marelle.tour%2 == 0):
             joueur = 1
         else:
             joueur = 2
@@ -77,7 +76,7 @@ def jouer():
             else:
                 retirer_pion(1)
         afficher_plateau(marelle)
-        tour += 1
+        marelle.tour += 1
         
 marelle = Marelle()
 jouer()

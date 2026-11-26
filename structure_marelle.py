@@ -22,6 +22,7 @@ class Marelle:
         }
 
         self.pions = [0]*24
+        self.tour = 0
 
     def check_possible(self, case_dep, case_arr, joueur):
         return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep] if self.nombre_liste_pions(joueur)[0] > 3 else True
@@ -78,7 +79,16 @@ class Marelle:
                 blocked = False
         return blocked
 
-    def enregistrer(self):
-        
+    def enregistrer_console(self):
+        lignes = [
+            self.moulins,
+            self.adj,
+            self.pions,
+            self.tour
+        ]
+        nom_fichier = input("Vous voulez enregistrer la partie sous quel nom ?")
+
+        with open(nom_fichier, "w", encoding="utf-8") as fichier:
+            fichier.writelines(lignes)
 
         
