@@ -26,5 +26,8 @@ class Marelle:
     def check_possible(self, joueur, case):
         pass
 
+    def check_win(self):
+        pass
+
 
         
