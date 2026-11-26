@@ -39,21 +39,24 @@ class Marelle:
     def check_win(self):
         win = False
         winner = None
+        other_player = {1: 2, 2: 1}
         for joueur in [1, 2]:
             if self.nombre_liste_pions(joueur)[0] == 2:
                 win = True
-                winner = joueur
+                winner = other_player[joueur]
 
         if not win:
             for joueur in [1, 2]:
                 blocked = True
-                for case_dep in self.nombre_liste_pions(joueur)[1]:
+                n, l_cases = self.nombre_liste_pions(joueur)
+                for case_dep in l_cases:
                     for case_arr in self.adj[case_dep]:
                         if self.pions[case_arr] == 0:
                             blocked = False
 
                 if blocked:
-                    win 
+                    win = True
+                    winner = other_player[joueur]
 
         return win, winner
 
@@ -63,5 +66,12 @@ class Marelle:
                 if self.pions[a] == self.pions[b] == self.pions[c] and self.pions[a] != 0:
                     return True, self.pions[a]
         return False, None
+
+    def is_blocked(self, case):
+        blocked = True
+        for case_arr in self.adj[case]:
+            if self.pions[case_arr] == 0:
+                blocked = False
+        return blocked
 
         
