@@ -36,7 +36,7 @@ def placer_pion(joueur):
     while not marelle.check_possible_init(case):
         case = int(input("Case non disponible, choisissez-en une autre (0 à 23) : "))
     marelle.pions[case] = joueur
-    if Marelle.check_alligne(case):
+    if marelle.check_alligne(case):
             if (joueur == 1):
                 retirer_pion(2)
             else:
