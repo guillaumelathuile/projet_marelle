@@ -25,7 +25,7 @@ class Marelle:
         self.tour = 0
 
     def check_possible(self, case_dep, case_arr, joueur):
-        if self.nombre_liste_pions(joueur)[0] > 3:
+        if not self.nombre_liste_pions(joueur)[0] > 3:
             return self.pions[case_arr] == 0
         else:
             return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep]
@@ -46,6 +46,8 @@ class Marelle:
     def check_win(self):
         win = False
         winner = None
+        if self.tour < 18:
+            return win, winner
         other_player = {1: 2, 2: 1}
         for joueur in [1, 2]:
             if self.nombre_liste_pions(joueur)[0] == 2:
