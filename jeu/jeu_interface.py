@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-WIDTH, HEIGHT = 600, 760
+WIDTH, HEIGHT = 800, 800
 ROWS = 6
 MARGIN = 24
 GAP = 7
@@ -15,6 +15,10 @@ GREEN = (83, 141, 78)
 YELLOW = (181, 159, 59)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+fond = pygame.image.load("marelle_jungle.png").convert()
+pion_j1 = pygame.image.load("pion_bleu.png").convert()
+pion_j2 = pygame.image.load("pion_rouge.png").convert()
+
 pygame.display.set_caption("Marelle")
 clock = pygame.time.Clock()
 
@@ -28,9 +32,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     clock.tick(60)
     screen.fill(BG)
+    
+    screen.blit(fond, (0, 0))
+    def dessiner_pion(screen, image, index_point):
+        x, y = POINTS[index_point]
+        rect = image.get_rect(center=(x, y))
+        screen.blit(image, rect)
+
+    
     pygame.display.flip()
 
 pygame.quit()
