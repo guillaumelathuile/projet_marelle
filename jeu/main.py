@@ -1,5 +1,7 @@
+import asyncio
 import pygame
 from structure_marelle import Marelle
+
 
 def dessiner_pion(screen, image, index_point):
     x, y = points[index_point]
@@ -9,30 +11,22 @@ def dessiner_pion(screen, image, index_point):
 
 pygame.init()
 WIDTH, HEIGHT = 800, 800
-ROWS = 6
-MARGIN = 24
-GAP = 7
-GRID_TOP = 155
 
 BG = (234, 18, 19)
 
-WHITE = (245, 245, 245)
-GREY = (58, 58, 60)
-BORDER = (70, 70, 72)
-GREEN = (83, 141, 78)
-YELLOW = (181, 159, 59)
-
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-fond = pygame.image.load(r"C:\Users\Lucas\Documents\ESEO\Algo et struct\Algo_et_struct_Projet_marelle\marelle_jungle.png").convert()
-pion_j1 = pygame.image.load(r"C:\Users\Lucas\Documents\ESEO\Algo et struct\Algo_et_struct_Projet_marelle\pion_blanc.png").convert()
-pion_j2 = pygame.image.load(r"C:\Users\Lucas\Documents\ESEO\Algo et struct\Algo_et_struct_Projet_marelle\pion_noir.png").convert()
+# Chemins relatifs : les images doivent être dans le même dossier que main.py (jeu/)
+fond = pygame.image.load("marelle_jungle.png").convert()
+pion_j1 = pygame.image.load("pion_blanc.png").convert_alpha()
+pion_j2 = pygame.image.load("pion_noir.png").convert_alpha()
 
 pygame.display.set_caption("Marelle")
 clock = pygame.time.Clock()
 
-TITLE_FONT = pygame.font.SysFont("arial", 44, bold=True)
-INFO_FONT = pygame.font.SysFont("arial", 22)
-SMALL_FONT = pygame.font.SysFont("arial", 18)
+# SysFont ne marche pas sur le web : police par défaut de pygame
+TITLE_FONT = pygame.font.Font(None, 54)
+INFO_FONT = pygame.font.Font(None, 28)
+SMALL_FONT = pygame.font.Font(None, 22)
 
 C = 400
 tolerance = 20
@@ -45,35 +39,30 @@ for r in (330, 220, 110):  # carré extérieur, milieu, intérieur
 marelle = Marelle()
 
 
-running = True
-while running:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x, y = event.pos
-            i = 0
-            for r in (330, 220, 110):  # carré extérieur, milieu, intérieur
-                for dx, dy in [(-1,-1),(0,-1),(1,-1),(1,0),(1,1),(0,1),(-1,1),(-1,0)]:
-                    px = C + dx*r
-                    py =  C + dy*r
-
-                    if px -tolerance <= x <= px + tolerance and py -tolerance <= y <= py + tolerance:
+async def main():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                for i, (px, py) in enumerate(points):
+                    if px - tolerance <= x <= px + tolerance and py - tolerance <= y <= py + tolerance:
                         marelle.pions[i] = 1
-                    i += 1
+
+        screen.fill(BG)
+        screen.blit(fond, (0, 0))
+        for i in marelle.nombre_liste_pions(1)[1]:
+            dessiner_pion(screen, pion_j1, i)
+        for i in marelle.nombre_liste_pions(2)[1]:
+            dessiner_pion(screen, pion_j2, i)
+
+        pygame.display.flip()
+        clock.tick(60)
+        await asyncio.sleep(0)  # obligatoire pour pygbag
+
+    pygame.quit()
 
 
-    clock.tick(60)
-    screen.fill(BG)
-    
-    screen.blit(fond, (0, 0))
-    for i in marelle.nombre_liste_pions(1)[1]:
-        dessiner_pion(screen, pion_j1, i)
-    for i in marelle.nombre_liste_pions(2)[1]:
-        dessiner_pion(screen, pion_j2, i)
-
-    
-    pygame.display.flip()
-
-pygame.quit()
+asyncio.run(main())
