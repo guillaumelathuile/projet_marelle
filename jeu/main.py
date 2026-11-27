@@ -95,15 +95,7 @@ def afficher_texte_style(screen, texte, x, y, taille=28,
 
 
 pygame.init()
-<<<<<<< HEAD
 WIDTH, HEIGHT = 800, 800
-=======
-WIDTH, HEIGHT = 1400, 800
-ROWS = 6
-MARGIN = 24
-GAP = 7
-GRID_TOP = 155
->>>>>>> f6363ff (fin interface)
 
 BG = (0, 0, 0)
 
@@ -139,7 +131,6 @@ alligne = False
 win = False
 texte = f"Supprimez un pion de votre adversaire, tour du joueur {joueur_du_tour()}"
 
-<<<<<<< HEAD
 async def main():
     running = True
     while running:
@@ -167,78 +158,3 @@ async def main():
 
 
 asyncio.run(main())
-=======
-running = True
-while running:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x, y = event.pos
-            i = 0
-            
-            for r in (330, 220, 110):  # carré extérieur, milieu, intérieur
-                for dx, dy in [(-1,-1),(0,-1),(1,-1),(1,0),(1,1),(0,1),(-1,1),(-1,0)]:
-                    px = C + dx*r
-                    py =  C + dy*r
-
-                    if px -tolerance <= x <= px + tolerance and py -tolerance <= y <= py + tolerance and not win:
-                        temp = None
-                        if alligne:
-                            texte = f"Supprimez un pion de votre adversaire, tour du joueur {joueur_du_tour()}"
-                            if marelle.pions[i] == joueur_oppose(joueur_qui_alligne):
-                                marelle.pions[i] = 0
-                                alligne = False
-
-                        elif marelle.tour < 18:
-                            temp = placer_pion(i)
-                            if temp is not None:
-                                last_move = temp
-                            texte = f"Début de partie, placez tous vos pions sur la grille, tour du joueur {joueur_du_tour()}"
-                        else:
-                            if pion_selected:
-                                texte = f"Choisissez l'endroit de dépose, tour du joueur {joueur_du_tour()}"                                
-                                temp = placer_pion(i, pion_selected_val)
-                                if temp is not None:
-                                    last_move = temp
-                                pion_selected = False
-                            else:
-                                texte = f"Sélectionnez un pion à bouger,  tour du joueur {joueur_du_tour()}"
-                                if marelle.pions[i] == joueur_du_tour():
-                                    pion_selected = True
-                                    pion_selected_val = i
-
-                        if temp is not None:                            
-                            if marelle.check_alligne(last_move)[0]:
-                                alligne = True
-                                joueur_qui_alligne = marelle.check_alligne(last_move)[1]                            
-                    i += 1
-
-
-    clock.tick(30)
-    screen.fill(BG)
-
-    if alligne:
-        texte = f"Supprimez un pion de votre adversaire, tour du joueur {joueur_du_tour()}"
-    elif marelle.tour < 18:
-        texte = f"Début de partie, placez tous vos pions sur la grille, tour du joueur {joueur_du_tour()}"
-    else:
-        if pion_selected:
-            texte = f"Choisissez l'endroit de dépose, tour du joueur {joueur_du_tour()}"
-        else:
-            texte = f"Sélectionnez un pion à bouger,  tour du joueur {joueur_du_tour()}"
-    screen.blit(fond, (0, 0))
-    afficher_texte_style(screen, texte, 820, 390)
-    for i in marelle.nombre_liste_pions(1)[1]:
-        dessiner_pion(screen, pion_j1, i)
-    for i in marelle.nombre_liste_pions(2)[1]:
-        dessiner_pion(screen, pion_j2, i)
-
-    win, winner = marelle.check_win()
-    if win:
-        texte = f"Félicitation, le joueur {joueur_du_tour()} a gagné"
-    pygame.display.flip()
-
-pygame.quit()
->>>>>>> f6363ff (fin interface)
