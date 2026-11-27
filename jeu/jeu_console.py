@@ -94,9 +94,13 @@ def jouer():
             retirer_pion(adversaire_de(joueur))
             afficher_plateau(marelle)
         marelle.tour += 1
-
     gagnant = marelle.check_win()[1]
     print(f"Le joueur {gagnant} a gagné !")
+    rep = int(input("Voulez-vous rejouer ? (1 : Oui / 2 : Non) : "))
+    if rep == 1:
+        jouer()
+    else:
+        print("Merci d'avoir joué ! ")
 
 
 marelle = Marelle()

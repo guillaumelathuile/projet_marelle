@@ -25,7 +25,6 @@ def placer_pion(case_arr, case_dep=None):
             coup_joue = case_arr
     else:
         if marelle.check_possible(case_dep, case_arr, joueur):
-            print(case_dep, case_arr, marelle.adj[case_dep])
             marelle.pions[case_dep] = 0
             marelle.pions[case_arr] = joueur
             marelle.tour += 1
@@ -33,19 +32,29 @@ def placer_pion(case_arr, case_dep=None):
     return coup_joue
 
 
+# SysFont ne marche pas sur le web : on utilise la police par défaut de pygame,
+# créée une seule fois par taille (et non à chaque appel).
+_polices = {}
+
+def get_police(taille, gras):
+    cle = (taille, gras)
+    if cle not in _polices:
+        f = pygame.font.Font(None, taille)
+        f.set_bold(gras)
+        _polices[cle] = f
+    return _polices[cle]
 
 
-
-def afficher_texte_style(screen, texte, x, y, taille=28,
+def afficher_texte_style(screen, texte, x, y, taille=36,
                          couleur=(245, 245, 245),
                          ombre=(0, 0, 0),
-                         police="georgia",
+                         police=None,   # ignoré : gardé pour ne pas casser les appels existants
                          gras=True,
                          centre=False,
                          largeur_max=500,
                          espacement=8):
 
-    font = pygame.font.SysFont(police, taille, bold=gras)
+    font = get_police(taille, gras)
 
     # Découpage du texte en mots
     mots = texte.split(" ")
@@ -53,17 +62,13 @@ def afficher_texte_style(screen, texte, x, y, taille=28,
     ligne_actuelle = ""
 
     for mot in mots:
-
         test = ligne_actuelle + " " + mot if ligne_actuelle else mot
-
         # Vérifie si la ligne dépasse la largeur maximale
         if font.size(test)[0] <= largeur_max:
             ligne_actuelle = test
-
         else:
             if ligne_actuelle:
                 lignes.append(ligne_actuelle)
-
             ligne_actuelle = mot
 
     if ligne_actuelle:
@@ -73,25 +78,19 @@ def afficher_texte_style(screen, texte, x, y, taille=28,
     hauteur_ligne = font.get_height() + espacement
 
     for i, ligne in enumerate(lignes):
-
         texte_ombre = font.render(ligne, True, ombre)
         texte_surface = font.render(ligne, True, couleur)
 
         rect = texte_surface.get_rect()
-
         if centre:
             rect.center = (x, y + i * hauteur_ligne)
         else:
             rect.topleft = (x, y + i * hauteur_ligne)
 
-        # Ombre portée
-        screen.blit(texte_ombre, (rect.x + 2, rect.y + 3))
-
-        # Texte principal
-        screen.blit(texte_surface, rect)
+        screen.blit(texte_ombre, (rect.x + 2, rect.y + 3))  # ombre portée
+        screen.blit(texte_surface, rect)                    # texte principal
 
     return len(lignes) * hauteur_ligne
-
 
 
 pygame.init()
@@ -108,7 +107,6 @@ pion_j2 = pygame.image.load("pion_noir.png").convert_alpha()
 pygame.display.set_caption("Marelle")
 clock = pygame.time.Clock()
 
-# SysFont ne marche pas sur le web : police par défaut de pygame
 TITLE_FONT = pygame.font.Font(None, 54)
 INFO_FONT = pygame.font.Font(None, 28)
 SMALL_FONT = pygame.font.Font(None, 22)
@@ -122,6 +120,8 @@ for r in (330, 220, 110):  # carré extérieur, milieu, intérieur
         points.append((C + dx*r, C + dy*r))
 
 marelle = Marelle()
+if not hasattr(marelle, "tour"):   # au cas où structure_marelle.py n'a pas cet attribut
+    marelle.tour = 0
 
 pion_selected = False
 pion_selected_val = None
@@ -130,6 +130,7 @@ joueur_qui_alligne = None
 alligne = False
 win = False
 texte = f"Supprimez un pion de votre adversaire, tour du joueur {joueur_du_tour()}"
+
 
 async def main():
     running = True
