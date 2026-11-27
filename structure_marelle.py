@@ -25,13 +25,16 @@ class Marelle:
         self.tour = 0
 
     def check_possible(self, case_dep, case_arr, joueur):
-        return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep] if self.nombre_liste_pions(joueur)[0] > 3 else True
+        if self.nombre_liste_pions(joueur)[0] > 3:
+            return self.pions[case_arr] == 0
+        else:
+            return self.pions[case_arr] == 0 and case_arr in self.adj[case_dep]
 
     def check_possible_init(self, case):
         return self.pions[case] == 0
     
     def nombre_liste_pions(self, joueur):
-        assert(joueur in [1, 2], "Joueur doit etre soit 1 ou 2")
+        assert joueur in [1, 2], "Joueur doit etre soit 1 ou 2"
         n = 0
         l = []
         for i in range(len(self.pions)):
